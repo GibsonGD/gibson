@@ -125,8 +125,6 @@ opts.Add(BoolVariable("use_lto", "Use link-time optimization", False))
 
 # Components
 opts.Add(BoolVariable("deprecated", "Enable deprecated features", True))
-opts.Add(BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
-opts.Add(BoolVariable("xaudio2", "Enable the XAudio2 audio driver", False))
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
 opts.Add(BoolVariable("custom_modules_recursive", "Detect custom modules recursively for each specified path.", True))
 
@@ -146,35 +144,13 @@ opts.Add(
         False,
     )
 )
-opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
-opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
 opts.Add(BoolVariable("no_editor_splash", "Don't use the custom splash screen for the editor", True))
 opts.Add("system_certs_path", "Use this path as SSL certificates default for editor (for package maintainers)", "")
 opts.Add(BoolVariable("use_precise_math_checks", "Math checks use very precise epsilon (debug option)", False))
 
 # Thirdparty libraries
-opts.Add(BoolVariable("builtin_bullet", "Use the built-in Bullet library", True))
 opts.Add(BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles", True))
-opts.Add(BoolVariable("builtin_embree", "Use the built-in Embree library", True))
-opts.Add(BoolVariable("builtin_enet", "Use the built-in ENet library", True))
-opts.Add(BoolVariable("builtin_freetype", "Use the built-in FreeType library", True))
-opts.Add(BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
-opts.Add(BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
-opts.Add(BoolVariable("builtin_libtheora", "Use the built-in libtheora library", True))
-opts.Add(BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library", True))
-opts.Add(BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
-opts.Add(BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
-opts.Add(BoolVariable("builtin_wslay", "Use the built-in wslay library", True))
 opts.Add(BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
-opts.Add(BoolVariable("builtin_miniupnpc", "Use the built-in miniupnpc library", True))
-opts.Add(BoolVariable("builtin_opus", "Use the built-in Opus library", True))
-opts.Add(BoolVariable("builtin_pcre2", "Use the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_pcre2_with_jit", "Use JIT compiler for the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_recast", "Use the built-in Recast library", True))
-opts.Add(BoolVariable("builtin_squish", "Use the built-in squish library", True))
-opts.Add(BoolVariable("builtin_xatlas", "Use the built-in xatlas library", True))
-opts.Add(BoolVariable("builtin_zlib", "Use the built-in zlib library", True))
-opts.Add(BoolVariable("builtin_zstd", "Use the built-in Zstd library", True))
 
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
@@ -588,36 +564,6 @@ if selected_platform in platform_list:
         env.Append(CPPDEFINES=["PTRCALL_ENABLED"])
     if env["tools"]:
         env.Append(CPPDEFINES=["TOOLS_ENABLED"])
-    if env["disable_3d"]:
-        if env["tools"]:
-            print(
-                "Build option 'disable_3d=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
-            sys.exit(255)
-        else:
-            env.Append(CPPDEFINES=["_3D_DISABLED"])
-    if env["disable_advanced_gui"]:
-        if env["tools"]:
-            print(
-                "Build option 'disable_advanced_gui=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
-            sys.exit(255)
-        else:
-            env.Append(CPPDEFINES=["ADVANCED_GUI_DISABLED"])
-    if env["minizip"]:
-        env.Append(CPPDEFINES=["MINIZIP_ENABLED"])
-
-    editor_module_list = ["freetype"]
-    for x in editor_module_list:
-        if not env["module_" + x + "_enabled"]:
-            if env["tools"]:
-                print(
-                    "Build option 'module_" + x + "_enabled=no' cannot be used with 'tools=yes' (editor), "
-                    "only with 'tools=no' (export template)."
-                )
-                sys.exit(255)
 
     if not env["verbose"]:
         methods.no_verbose(sys, env)

@@ -8,31 +8,8 @@ env.drivers_sources = []
 SConscript("unix/SCsub")
 SConscript("windows/SCsub")
 
-# Sounds drivers
-SConscript("alsa/SCsub")
-SConscript("coreaudio/SCsub")
-SConscript("pulseaudio/SCsub")
-if env["platform"] == "windows":
-    SConscript("wasapi/SCsub")
-if env["xaudio2"]:
-    SConscript("xaudio2/SCsub")
-
-# Midi drivers
-SConscript("alsamidi/SCsub")
-SConscript("coremidi/SCsub")
-SConscript("winmidi/SCsub")
-
 # Graphics drivers
-if env["platform"] != "server":
-    SConscript("gles3/SCsub")
-    SConscript("gles2/SCsub")
-    SConscript("gles_common/SCsub")
-    SConscript("gl_context/SCsub")
-else:
-    SConscript("dummy/SCsub")
-
-# Core dependencies
-SConscript("png/SCsub")
+SConscript("dummy/SCsub")
 
 env.add_source_files(env.drivers_sources, "*.cpp")
 
